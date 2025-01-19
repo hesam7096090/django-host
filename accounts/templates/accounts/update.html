@@ -1,0 +1,13 @@
+{% extends '_base.html' %}
+{% block title %}Update Profile{% endblock %}
+{% block body %}
+<div class="container">
+    <h2>Update Profile</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Update</button>
+        <a href="{% url 'accounts:profile' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

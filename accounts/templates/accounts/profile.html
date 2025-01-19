@@ -1,0 +1,47 @@
+{% extends '_base.html' %}
+{% block title %}پروفایل کاربری{% endblock %}
+{% block body %}
+<div class="container">
+    <h2>پروفایل کاربری</h2>
+    <div class="card">
+        <div class="card-body">
+            {% if user.profile_picture %}
+                <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="img-thumbnail" style="max-width: 150px;">
+            {% else %}
+                <p>هیچ عکسی بارگذاری نشد</p>
+            {% endif %}
+            <p><strong>نام کاربری:</strong> {{ user.username }}</p>
+            <p><strong>پست الکترونیکی:</strong> {{ user.email }}</p>
+            <p><strong>نام:</strong> {{ user.first_name }}</p>
+            <p><strong>نام خانوادگی:</strong> {{ user.last_name }}</p>
+        </div>
+    </div>
+    <div class="mt-3">
+        <a href="{% url 'accounts:update' %}" class="btn btn-primary">به روز رسانی</a>
+        <a href="{% url 'accounts:change_password' %}" class="btn btn-secondary">ویرایش رمزعبور</a>
+    </div>
+
+    <hr>
+    <h3 class="mt-5">محصولات ثبت‌شده</h3>
+    {% if user_items %}
+        <div class="row">
+            {% for item in user_items %}
+                <div class="col-12 col-md-6 col-lg-4 mb-4">
+                    <div class="card">
+                        {% if item.images.all %}
+                            <img src="{{ item.images.first.image.url }}" class="card-img-top" alt="{{ item.title }}" style="max-height: 200px; object-fit: cover;">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ item.title }}</h5>
+                            <p class="card-text text-muted">{{ item.description|truncatewords:15 }}</p>
+                            <p class="text-success">${{ item.price_per_day }} / روز </p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>هیچ محصولی ثبت نشده است.</p>
+    {% endif %}
+</div>
+{% endblock %}

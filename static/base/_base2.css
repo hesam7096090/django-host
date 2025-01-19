@@ -1,0 +1,8 @@
+@font-face {
+    font-family: "IRANSansWeb Medium";
+    src: url("../fonts/IRANSansWeb_Medium.ttf.lnk") format("truetype");
+}
+
+body{
+    font-family: "IRANSansWeb Medium" ;
+}

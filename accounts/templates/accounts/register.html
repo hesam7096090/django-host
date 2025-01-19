@@ -1,0 +1,14 @@
+{% extends '_base.html' %}
+{% load static %}
+{% block title %}ثبت نام{% endblock %}
+{% block body %}
+      <link href="{% static 'accounts/register6.css' %}" rel="stylesheet"/>
+<div class="container">
+    <h2>ثبت نام</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">تائید</button>
+    </form>
+</div>
+{% endblock %}

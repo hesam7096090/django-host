@@ -1,0 +1,110 @@
+{% extends '_base.html' %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'product/product4.css' %}">
+{% endblock %}
+{% block body %}
+    <div id="loading"
+         style="display: flex; align-items: center; justify-content: center; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8); z-index: 9999;">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">در حال بارگذاری...</span>
+        </div>
+    </div>
+    <div class="container mt-5">
+        <h1 class="mb-4 text-white">محصولات</h1>
+
+        <div class="mb-4">
+            <form method="get" class="d-flex">
+                <select name="category" class="form-select me-2">
+                    <option value="">همه محصولات</option>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}"
+                                {% if category.id|stringformat:"s" == selected_category %}selected{% endif %}>
+                            {{ category.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <button class="btn btn-primary">فیلتر</button>
+            </form>
+        </div>
+
+        <div class="row">
+
+            {% for item in items %}
+                <div class="col-12 col-md-6 col-lg-4 items mb-4">
+                    <div class="card">
+                        {% if item.images.all %}
+                            <img src="{{ item.images.first.image.url }}" class="card-img-top" alt="{{ item.title }}"
+                                 style="max-height: 200px; object-fit: cover;">
+                        {% else %}
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ item.title }}</h5>
+                            <p class="card-text text-muted">{{ item.description|truncatewords:15 }}</p>
+                            <p class="text-success">${{ item.price_per_day }} / روز </p>
+                            <p class="text-success">${{ item.created_at }}  </p>
+                            <a href="{% url 'product:product_detail' item.id %}" class="btn btn-primary">جزعیات</a>
+                            <a class="btn btn-primary"><i class="bi bi-bookmark"></i></a>
+
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        {% if not items %}
+            <div class="alert alert-warning text-center">
+
+                محصولی برای نمایش وجود ندارد.
+            </div>
+        {% endif %}
+    </div>
+    <nav class="mt-4">
+        <ul class="pagination justify-content-center">
+            {% if items.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?q={{ query }}&page=1">&laquo; اولی</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?q={{ query }}&page={{ items.previous_page_number }}">قبلی</a>
+                </li>
+            {% endif %}
+            {% if items.has_next %}
+                <li class="page-item">
+                    <a class="page-link"
+                       href="?q={{ query }}&page={{ items.next_page_number }}">بعدی</a>
+                </li>
+
+            {% endif %}
+            {% for page_num in items.paginator.page_range %}
+                {% if items.number == page_num %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ page_num }}</span>
+                    </li>
+                {% else %}
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="?q={{ query }}&page={{ page_num }}">{{ page_num }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+            {% if items.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?q={{ query }}&page={{ items.paginator.num_pages }}">آخرین
+                        &raquo;</a>
+                </li>
+            {% endif %}
+        </ul>
+
+    </nav>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const loading = document.getElementById("loading");
+            const content = document.getElementById("content");
+
+            loading.style.display = "none";
+            content.style.display = "block";
+        });
+    </script>
+
+
+{% endblock %}
